@@ -4,10 +4,7 @@ import org.example.DAO.BookDAO;
 import org.example.model.Book;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.table.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -30,7 +27,7 @@ public class BookManagerGUI extends JFrame {
 
     public BookManagerGUI() {
         setTitle("Book Management");
-        setSize(1000, 700);
+        setSize(900, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         initComponents();
@@ -38,11 +35,9 @@ public class BookManagerGUI extends JFrame {
     }
 
     private void initComponents() {
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        JPanel panel = new JPanel(new BorderLayout());
         add(panel);
 
-        // Tùy chỉnh Header của Bảng
         String[] columnNames = {"ID", "Name", "Title", "Author", "Year"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
@@ -52,154 +47,85 @@ public class BookManagerGUI extends JFrame {
         };
         table = new JTable(tableModel);
         table.setFillsViewportHeight(true);
-        table.setRowHeight(25);
-        table.setFont(new Font("Arial", Font.PLAIN, 14));
-
-        // Tùy chỉnh Header
-        JTableHeader header = table.getTableHeader();
-        header.setBackground(new Color(70, 130, 180));
-        header.setForeground(Color.WHITE);
-        header.setFont(new Font("Arial", Font.BOLD, 16));
-        header.setReorderingAllowed(false);
-
-        // Tùy chỉnh Sắp Xếp và Tìm Kiếm
-        table.setAutoCreateRowSorter(true);
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
-        table.setRowSorter(sorter);
-
-        // Thêm màu nền xen kẽ cho các hàng
-        table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            private final Color EVEN_ROW_COLOR = new Color(240, 240, 240);
-            private final Color ODD_ROW_COLOR = Color.WHITE;
-
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value,
-                                                           boolean isSelected, boolean hasFocus,
-                                                           int row, int column) {
-                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                if (!isSelected) {
-                    if (row % 2 == 0) {
-                        c.setBackground(EVEN_ROW_COLOR);
-                    } else {
-                        c.setBackground(ODD_ROW_COLOR);
-                    }
-                } else {
-                    c.setBackground(new Color(100, 149, 237)); // Màu xanh khi chọn
-                    c.setForeground(Color.WHITE);
-                }
-                return c;
-            }
-        });
-
         JScrollPane scrollPane = new JScrollPane(table);
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        // Panel Tìm Kiếm
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         JLabel lblSearchId = new JLabel("Search by ID:");
-        lblSearchId.setFont(new Font("Arial", Font.PLAIN, 14));
         txtSearchId = new JTextField(10);
-        txtSearchId.setFont(new Font("Arial", Font.PLAIN, 14));
         btnSearch = new JButton("Search");
-        btnSearch.setFont(new Font("Arial", Font.PLAIN, 14));
         btnResetSearch = new JButton("Reset");
-        btnResetSearch.setFont(new Font("Arial", Font.PLAIN, 14));
         searchPanel.add(lblSearchId);
         searchPanel.add(txtSearchId);
         searchPanel.add(btnSearch);
         searchPanel.add(btnResetSearch);
         panel.add(searchPanel, BorderLayout.NORTH);
 
-        // Panel Nhập Liệu
         JPanel inputPanel = new JPanel(new GridBagLayout());
         inputPanel.setBorder(BorderFactory.createTitledBorder("Book Details"));
         panel.add(inputPanel, BorderLayout.WEST);
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         JLabel lblName = new JLabel("Name:");
-        lblName.setFont(new Font("Arial", Font.PLAIN, 14));
         gbc.gridx = 0;
         gbc.gridy = 0;
         inputPanel.add(lblName, gbc);
 
-        txtName = new JTextField(15);
-        txtName.setFont(new Font("Arial", Font.PLAIN, 14));
+        txtName = new JTextField(10);
         gbc.gridx = 1;
         gbc.gridy = 0;
         inputPanel.add(txtName, gbc);
 
         JLabel lblTitle = new JLabel("Title:");
-        lblTitle.setFont(new Font("Arial", Font.PLAIN, 14));
         gbc.gridx = 0;
         gbc.gridy = 1;
         inputPanel.add(lblTitle, gbc);
 
-        txtTitle = new JTextField(15);
-        txtTitle.setFont(new Font("Arial", Font.PLAIN, 14));
+        txtTitle = new JTextField(10);
         gbc.gridx = 1;
         gbc.gridy = 1;
         inputPanel.add(txtTitle, gbc);
 
         JLabel lblAuthor = new JLabel("Author:");
-        lblAuthor.setFont(new Font("Arial", Font.PLAIN, 14));
         gbc.gridx = 0;
         gbc.gridy = 2;
         inputPanel.add(lblAuthor, gbc);
 
-        txtAuthor = new JTextField(15);
-        txtAuthor.setFont(new Font("Arial", Font.PLAIN, 14));
+        txtAuthor = new JTextField(10);
         gbc.gridx = 1;
         gbc.gridy = 2;
         inputPanel.add(txtAuthor, gbc);
 
         JLabel lblYear = new JLabel("Year:");
-        lblYear.setFont(new Font("Arial", Font.PLAIN, 14));
         gbc.gridx = 0;
         gbc.gridy = 3;
         inputPanel.add(lblYear, gbc);
 
-        txtYear = new JTextField(15);
-        txtYear.setFont(new Font("Arial", Font.PLAIN, 14));
+        txtYear = new JTextField(10);
         gbc.gridx = 1;
         gbc.gridy = 3;
         inputPanel.add(txtYear, gbc);
 
-        // Panel Nút Chức Năng
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
         btnAdd = new JButton("Add");
-        btnAdd.setFont(new Font("Arial", Font.BOLD, 14));
-        btnAdd.setBackground(new Color(60, 179, 113));
-        btnAdd.setForeground(Color.WHITE);
-        btnAdd.setFocusPainted(false);
         buttonPanel.add(btnAdd);
+        btnAdd.setBackground(new Color(60, 179, 113));
 
         btnUpdate = new JButton("Update");
-        btnUpdate.setFont(new Font("Arial", Font.BOLD, 14));
-        btnUpdate.setBackground(new Color(30, 144, 255));
-        btnUpdate.setForeground(Color.WHITE);
-        btnUpdate.setFocusPainted(false);
         buttonPanel.add(btnUpdate);
-
+        btnUpdate.setBackground(new Color(30, 144, 255));
         btnDelete = new JButton("Delete");
-        btnDelete.setFont(new Font("Arial", Font.BOLD, 14));
-        btnDelete.setBackground(new Color(220, 20, 60));
-        btnDelete.setForeground(Color.WHITE);
-        btnDelete.setFocusPainted(false);
         buttonPanel.add(btnDelete);
-
+        btnDelete.setBackground(new Color(220, 20, 60));
         btnClear = new JButton("Clear");
-        btnClear.setFont(new Font("Arial", Font.BOLD, 14));
-        btnClear.setBackground(new Color(105, 105, 105));
-        btnClear.setForeground(Color.WHITE);
-        btnClear.setFocusPainted(false);
         buttonPanel.add(btnClear);
+        btnClear.setBackground(new Color(105, 105, 105));
 
-        // Thêm Action Listener cho các nút
         btnAdd.addActionListener(e -> addBook());
         btnUpdate.addActionListener(e -> updateBook());
         btnDelete.addActionListener(e -> deleteBook());
@@ -207,19 +133,15 @@ public class BookManagerGUI extends JFrame {
         btnSearch.addActionListener(e -> searchBookById());
         btnResetSearch.addActionListener(e -> resetSearch());
 
-        // Thêm Listener cho bảng khi click vào hàng
         table.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow >= 0) {
-                    // Đảm bảo lấy chỉ số hàng đúng khi có sorter
-                    int modelRow = table.convertRowIndexToModel(selectedRow);
-                    loadBookDetails(modelRow);
+                    loadBookDetails(selectedRow);
                 }
             }
         });
 
-        // Tải dữ liệu vào bảng
         refreshTable();
     }
 
@@ -260,9 +182,7 @@ public class BookManagerGUI extends JFrame {
         }
 
         try {
-            // Đảm bảo lấy chỉ số hàng đúng khi có sorter
-            int modelRow = table.convertRowIndexToModel(selectedRow);
-            int id = (int) tableModel.getValueAt(modelRow, 0);
+            int id = (int) tableModel.getValueAt(selectedRow, 0);
             String name = txtName.getText().trim();
             String title = txtTitle.getText().trim();
             String author = txtAuthor.getText().trim();
@@ -292,9 +212,7 @@ public class BookManagerGUI extends JFrame {
                 return;
             }
 
-            // Đảm bảo lấy chỉ số hàng đúng khi có sorter
-            int modelRow = table.convertRowIndexToModel(selectedRow);
-            int id = (int) tableModel.getValueAt(modelRow, 0);
+            int id = (int) tableModel.getValueAt(selectedRow, 0);
             bookDAO.deleteBook(id);
             refreshTable();
             clearFields();
@@ -341,10 +259,8 @@ public class BookManagerGUI extends JFrame {
     private void highlightBookInTable(int searchId) {
         for (int i = 0; i < tableModel.getRowCount(); i++) {
             if ((int) tableModel.getValueAt(i, 0) == searchId) {
-                // Đảm bảo lấy chỉ số hàng đúng khi có sorter
-                int viewRow = table.convertRowIndexToView(i);
-                table.setRowSelectionInterval(viewRow, viewRow);
-                table.scrollRectToVisible(table.getCellRect(viewRow, 0, true));
+                table.setRowSelectionInterval(i, i);
+                table.scrollRectToVisible(table.getCellRect(i, 0, true));
                 break;
             }
         }
@@ -370,4 +286,6 @@ public class BookManagerGUI extends JFrame {
     private void showInfo(String message) {
         JOptionPane.showMessageDialog(this, message, "Information", JOptionPane.INFORMATION_MESSAGE);
     }
+
+
 }
